@@ -1,0 +1,164 @@
+h1, h2, h3, h4, h5, h6 { border: 0; }
+div.template  { position: relative; font-family: serif; font-size: 1em; }
+div.leftcol   { position: absolute; width: 18%; top: 0; left: 0; }
+div.centercol { display: block; 
+                width: auto; padding-left: 20%; padding-right: 20%; }
+div.rightcol  { position: absolute; width: 16%; top: 0; left: 82%; 
+                padding-right: 0em; padding-left: 0em; }
+img.tinylogo  { position: absolute; top: 0; left: 25% }
+p.sitetitle   { margin-top: 0; margin-bottom: 0; }
+p.subsitehome { background-image: url(/templateimages/stars.gif);
+                background-position: 0 0; background-repeat: repeat-x;
+                margin-left: 1em; }
+p.navlinks    { text-align: right; padding-top: 0em; padding-right: 0em; } 
+
+body.titlepage { padding-top: 0em; padding-right: 0em; padding-left: 0em; 
+                 background-image: url(images/ssaseal.jpg); 
+                 background-position: center; }
+body        { margin: 0em; padding: 0em; }
+h1.act      { font-size: 1.6em; }
+h2.actdate  { font-size: 1.0em; font-weight: bold; margin-top: 1.2em;
+              margin-bottom: 1.0em; }
+h3.preamble { font-size: 1.0em; }
+h1.title    { font-size: 1.2em; }
+h2.title    { font-size: 1.0em; font-weight: normal; margin-top: 1.5em; 
+              margin-bottom: 1.0em; }
+h1.section  { font-size: 1.1em; font-weight: normal; margin-top: 1.0em; 
+              margin-bottom: 1.0em; }
+h2.subsec   { font-size: 1.0em; font-weight: normal; margin-top: 1.0em; 
+              margin-bottom: 0.5em; }
+p.section   { text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.subsec    { text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.paragraph { margin-left: 2em; text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.subpara   { margin-left: 4em; text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.clause    { margin-left: 6em; text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.subclause { margin-left: 8em; text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.item      { margin-left: 10em; text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.subitem   { margin-left: 12em; text-indent: 1em; margin-top: 0.1em; 
+              margin-bottom: 0.1em; }
+p.footnote  { font-size: 0.9em; text-indent: 1em; margin-top: 0.1em;
+              margin-bottom: 0.1em; }
+p.centertext     { margin-top: 0.2em; margin-bottom: 0.2em; }
+p.section-cont   { margin-top: 0.1em; margin-bottom: 0.1em; }
+p.subsec-cont    { margin-top: 0.1em; margin-bottom: 0.1em; }
+p.paragraph-cont { margin-top: 0.1em; margin-bottom: 0.1em; margin-left: 2em; }
+p.subpara-cont   { margin-top: 0.1em; margin-bottom: 0.1em; margin-left: 4em; }
+p.clause-cont    { margin-top: 0.1em; margin-bottom: 0.1em; margin-left: 6em; }
+p.subclause-cont { margin-top: 0.1em; margin-bottom: 0.1em; margin-left: 8em; }
+p.item-cont      { margin-top: 0.1em; margin-bottom: 0.1em; margin-left: 10em;}
+p.subitem-cont   { margin-top: 0.1em; margin-bottom: 0.1em; margin-left: 12em;}
+hr.ftsep    { margin-top: 0.5em; margin-bottom: 0.1em; width: 25%; 
+              text-align: left; margin-left: 0; }
+.sc         { font-variant: small-caps; }
+
+h1.voltoc   { font-size: 1.4em; }
+h2.voltoc   { font-size: 1.2em; }
+h3.voltoc   { font-style: italic; font-weight: normal; }
+
+h1.preface  { font-size: 1.4em; margin-bottom: 2.0em; margin-top: 1em; }
+h2.preface  { font-size: 1.1em; margin-top: 1.0em; margin-bottom: 0.8em; }
+p.preface   { font-size: 1.0em; text-indent: 1em; margin-top: 0.1em;
+              margin-bottom: 0.1em; }
+
+div.compiled { border-width: 2px; border-color: darkblue; 
+               border-style: solid; margin-top: 3em; margin-bottom: 2em;
+               margin-left: 15%; margin-right: 15%; }
+h2.compiled  { font-size: 1.2em; margin-bottom: 2em; }
+p.compiled   { margin-top: 0.5em; margin-bottom: 0.5em; }
+p.referral   { margin-top: 2em; }
+
+h3.preamble  { font-size: 1.0em; margin-bottom: 0.2em; }
+p.purpose    { font-size: 0.8em; margin-left: 1.0em; text-indent: -1.0em; 
+               margin-bottom: 0.1em; margin-top: 0.1em; }
+p.enacted    { font-style: italic; text-indent: 1.0em; margin-top: 0.1em; }
+div.comlist  { margin-top: 1em; margin-bottom: 2em; }
+p.comlist    { margin-top: 0.2em; margin-bottom: 0.2em; }
+td.comlist   { padding-right: 3em; }
+h1.comlist   { font-size: 1.4em; }
+
+div.index    { margin-left: 2.0em; margin-right: 2.0em; }
+h1.index     { font-size: 1.4em; margin-top: 3.0em; margin-bottom: 2.0em; }
+ul.index     { list-style-type: none; margin-top: 0.1em; 
+               margin-bottom: 0.1em; }
+h2.index1    { margin-left: 0.5em; margin-bottom: 0.2em; margin-top: 0.2em; 
+               font-size: 1.1em; }
+p.index1     { margin-left: 0.0em; text-indent: -1.0em; 
+               margin-top: 0.1em; margin-bottom: 0.1em; }
+p.index2     { margin-left: 0.0em; text-indent: -1.0em; 
+               margin-top: 0.1em; margin-bottom: 0.1em; }
+p.index3     { margin-left: 0.0em; text-indent: -1.0em; 
+               margin-top: 0.1em; margin-bottom: 0.1em; }
+p.index4     { margin-left: 0.0em; text-indent: -1.0em; 
+               margin-top: 0.1em; margin-bottom: 0.1em; }
+p.index5     { margin-left: 0.0em; text-indent: -1.0em;
+               margin-top: 0.1em; margin-bottom: 0.1em; }
+p.indexsee   { margin-left: 3.0em; text-indent: -2.0em;
+               margin-top: 0.1em; margin-bottom: 0.2em; }
+em.index1    { font-weight: bold; font-style: normal; }
+em.indexsee  { font-weight: bold; font-style: italic; }
+
+h1.indexletter { font-size: 1.4em; font-family: sans-serif; }
+h1.indextopic  { font-size: 1.4em; margin-top: 1.0em; margin-bottom: 1.0em; }
+h2.indextopic  { font-size: 1.2em; margin-top: 0.2em; margin-bottom: 0.2em; 
+                 font-family: sans-serif; }
+p.indextopic   { margin-left: 3.0em; margin-top: 0.1em; margin-bottom: 0.1em; }
+
+div.titlepage  { border-width: 5px; border-color: darkblue; 
+                 border-style: double; 
+                 margin-right: 0em; margin-left: 0em;
+                 font-size: medium; font-family: serif; 
+                 width: 100%;
+               }
+hr.titlepage   { margin-left: 40%; margin-right: 40%; }
+h1.titlepage   { margin-top: 3em; margin-bottom: 2em; 
+                 font-size: 2em; font-family: serif;
+               }
+h2.titlepage   { margin-top: 1em; margin-bottom: 0.5em; 
+                 font-size: 1.5em; font-family: serif;
+               }
+
+a.ssact:link { color: blue; background: white; }
+a.ssact:visited { color: blue; background: white; }
+a.ssact:hover { color: blue; background: yellow; }
+a.ssact:active { color: red; background: white; }
+
+td { font-family: serif; }
+
+table.leveltable { border-color: black; border-spacing: 0; 
+                   border-style: solid; border-collapse: collapse;
+                   border-width: medium 0; 
+                   font-family: serif; font-size: 1em; }
+th.leveltable    { border-bottom-width: medium; }
+
+table.statetable { border-collapse: collapse; border-width: thin 0; 
+                   border-style: solid; border-color: black; }
+thead.statetable { border-bottom-width: thin; border-bottom-style: solid; 
+                   border-bottom-color: black; }
+tbody.statetable { border: none; }
+tr.statetable td { font-family: serif; border: none; }
+tr.statetable th { border-bottom-width: thin; border-bottom-color: black; 
+                   border-bottom-style: solid; }
+
+table.yeartable  { border-collapse: collapse; }
+tbody.yeartable  { border-width: 0; }
+
+table.wagetable  { border-collapse: collapse; border-style: solid none;
+                   border-width: thin 0; border-color: black; }
+tbody.wagetable  { border-width: 0; }
+tr.wagetable th  { border-bottom-width: thin; border-bottom-color: black;
+                   border-bottom-style: solid; }
+tr.wagetable td  { border-width: 0; border-color: black;
+                   border-style: none; font-family: serif; }
+
+p.banner         { padding-left: 3em; padding-right: 3em; margin-left: 25%; margin-right: 25%;
+                   text-align: center; border-width: 2px; border-color: darkblue; 
+                   border-style: solid; margin-top: 0.5em; margin-bottom: 0.5em;
+                   background: yellow; font-family: sans-serif; font-size: 1.1em; }
+
