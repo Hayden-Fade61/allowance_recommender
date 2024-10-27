@@ -64,7 +64,8 @@ def main():
     for col in col_labels[1:]:
         print(f"Testing {col}...")
         stationarity_results.append(stationarity_tests(cpi_data[col]))
+    print(stationarity_results)
     print("Tests complete. Displaying results...\n")
     # results = pd.DataFrame(stationarity_results, index=col_labels[1:]) 
-    print(results)
+    # print(results)
 main()
