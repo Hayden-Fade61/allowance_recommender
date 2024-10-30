@@ -5,7 +5,7 @@ from sys import exit
 from os import path, mkdir
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.stattools import adfuller, kpss
-from statsmodels.tsa.arima_model import ARIMA, ARIMAResults
+from statsmodels.tsa.arima.model import ARIMA, ARIMAResults
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from collections.abc import Callable
@@ -15,7 +15,7 @@ import warnings
 from statsmodels.tools.sm_exceptions import InterpolationWarning
 
 # Adapted from: https://www.statsmodels.org/stable/examples/notebooks/generated/stationarity_detrending_adf_kpss.html#Stationarity-and-detrending-(ADF/KPSS)
-def do_stationarity_test(time_series: pd.Series, test: str) -> pd.Series:
+def do_stationarity_tests(time_series: pd.Series, test: str) -> pd.Series:
     TEST_BASE_INDEX = [ "Test Statistic", "p-value", "#Lags Used"]
     TEST_EXTRA_INDEX = {"adf": ["Number of Observations Used"]}
     index = TEST_BASE_INDEX + TEST_EXTRA_INDEX.get(test.lower(), [])
@@ -92,8 +92,8 @@ def test_for_stationarity(data: pd.DataFrame) -> None:
     kpss_results_list = []
     for col in data.columns:
         print(f"Testing {col}...")
-        adf_results_list.append(do_stationarity_test(data[col], "adf"))
-        kpss_results_list.append(do_stationarity_test(data[col], "kpss"))
+        adf_results_list.append(do_stationarity_tests(data[col], "adf"))
+        kpss_results_list.append(do_stationarity_tests(data[col], "kpss"))
     print("Tests done. Displaying results...")
     adf = pd.DataFrame(adf_results_list, index = data.columns)
     kpss = pd.DataFrame(kpss_results_list, index = data.columns)
@@ -136,27 +136,27 @@ def main() -> None:
             usecols= "A:D, F, J", 
             names= CPI_DATA_COLUMNS
         )
+        cpi_data.index = pd.DatetimeIndex(data=cpi_data.index, freq="QS-DEC")
     except FileNotFoundError:
         print(f"{input_file} does not exist")
         exit(1)
-    finally:
-        print("Read done, testing raw data for stationarity...")
+    print("Read done, testing raw data for stationarity...")
     
     # Test all cols for stationarity
-    test_for_stationarity(cpi_data)
-    make_autocorrelation_plots(cpi_data, "raw_acf")
+    # test_for_stationarity(cpi_data)
+    # make_autocorrelation_plots(cpi_data, "raw_acf")
 
     # Produce CPI line plot
-    print("Plotting all CPI line graphs...")
-    plot_visualisation(
-        data = cpi_data, 
-        plot_function = sns.lineplot,
-        chart_title = "QoQ Australian national and state capital CPIs over time",
-        x_label = "Year",
-        y_label = "CPI",
-        save_fig = True,
-        show_fig = False
-    )
+    # print("Plotting all CPI line graphs...")
+    # plot_visualisation(
+    #     data = cpi_data, 
+    #     plot_function = sns.lineplot,
+    #     chart_title = "QoQ Australian national and state capital CPIs over time",
+    #     x_label = "Year",
+    #     y_label = "CPI",
+    #     save_fig = True,
+    #     show_fig = False
+    # )
 
     # Estimate difference order with pmdarima
     estimated_orders = []
@@ -167,6 +167,11 @@ def main() -> None:
         estimated_orders.append(order) 
     differenced_df = difference_data(cpi_data, estimated_orders)
     print(f"Estimated difference orders: {estimated_orders}")
-    test_for_stationarity(differenced_df) 
-    make_autocorrelation_plots(differenced_df, "1st_diff_acf")
+    # test_for_stationarity(differenced_df) 
+    # make_autocorrelation_plots(differenced_df, "1st_diff_acf")
+    model = ARIMA(endog = cpi_data['Australia'], order=(2,1,1))
+    res: ARIMAResults
+    res = model.fit()
+    print(res.specification)
+    print(res.summary())
 main()
