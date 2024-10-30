@@ -8,6 +8,7 @@ from statsmodels.tsa.stattools import adfuller, kpss
 from statsmodels.tsa.arima.model import ARIMA, ARIMAResults
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from collections.abc import Callable
 from sklearn.model_selection import train_test_split
 from pmdarima.arima import ndiffs
@@ -31,7 +32,7 @@ def do_stationarity_tests(time_series: pd.Series, test: str) -> pd.Series:
 
 def plot_visualisation(
         data: pd.DataFrame | pd.Series, 
-        plot_function: Callable[..., Axes],
+        plot_function: Callable[..., Axes | Figure],
         chart_folder: str = "",
         chart_title: str | None = None,
         x_label: str | None = None,
@@ -39,7 +40,7 @@ def plot_visualisation(
         save_fig: bool = False,
         show_fig: bool = True
     ) -> None:
-
+        
         plot_function(data)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
@@ -62,7 +63,7 @@ def plot_visualisation(
         
         if show_fig:
             plt.show()
-        plt.clf()
+        plt.close()
 
 def make_autocorrelation_plots(data: pd.DataFrame, folder_path: str = "") -> None:
      for col in data.columns:
@@ -109,6 +110,10 @@ def difference_data(data: pd.DataFrame | pd.Series, order: int) -> pd.DataFrame 
         )
     return differenced.dropna(axis=0)
 
+def box_cox_transform(data: pd.DataFrame | pd.Series) -> None:
+    # In-place Box-Cox transform 
+    pass
+
 def corrected_aic(aic : float, param_count: int, num_observations : int):
     correction_term = float(2 * (param_count + 1) * (param_count + 2)) / float(num_observations - 2)
     return aic + correction_term
@@ -126,8 +131,6 @@ def estimate_best_model(data: pd.DataFrame, max_p: int, max_q: int, d: int) -> A
             model = ARIMA(endog = data, exog = None, order = (p, d, q))
             result = model.fit()
             model_order = result.specification['order']
-
-            
     return best_result
 
 def main() -> None:
@@ -186,14 +189,25 @@ def main() -> None:
     print(f"Estimated difference order: {d}")
 
     # test 1st difference for stationarity
-    differenced_df = difference_data(cpi_data, d)
-    test_for_stationarity(differenced_df) 
-    make_autocorrelation_plots(differenced_df, "1st_diff_acf")
+    differenced_cpi = difference_data(cpi_data, d)
+    test_for_stationarity(differenced_cpi) 
+    make_autocorrelation_plots(differenced_cpi, "1st_diff_acf")
     # max values obtained by examining autocorrelation plots
     p = 2
     q = 5
-    # estimate_best_model(cpi_data, max_p = p, max_q = q, d = diff_order)
-    model = ARIMA(endog = cpi_data, exog = None, order = (2, d, 1))
+    # Fit an ARMA on differenced values, fit() has no discard NaN on differencing by default and idk
+    # how to tell it to do that
+    # estimate_best_model(cpi_data, max_p = p, max_q = q, d = 0) 
+    model = ARIMA(endog = differenced_cpi, exog = None, order = (2, 0, 1))
     result = model.fit()
-    print(result.specification)
+    # print(result.specification)
+    print(result.summary())
+    plot_visualisation(
+        data = result.resid,
+        plot_function= sns.lineplot, 
+        chart_folder= "residual_plots",
+        chart_title= f"Residual plot for ARIMA(2, {d}, 1)",
+        x_label= "Year",
+        y_label= "Residual"
+    )
 main()
