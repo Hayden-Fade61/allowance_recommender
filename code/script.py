@@ -111,6 +111,13 @@ def difference_data(data: pd.DataFrame | pd.Series, order: list[int]) -> pd.Data
         i += 1
     return differenced.dropna(axis=0)
 
+def estimate_best_model(data: pd.DataFrame, max_p: list[int], max_q: list[int], d_list: list[int]):
+    # Brute force search from 0 -> max val for each p and q
+    # Minimum AIC criterion decided as best or min MLE/LSE
+    # Maybe do model eval here so models can be judged based on that 
+    # Return dict with a model for each column
+    pass
+
 def main() -> None:
     sns.set_theme(style ="whitegrid")
     warnings.simplefilter(action = 'ignore', category = InterpolationWarning)
@@ -124,7 +131,7 @@ def main() -> None:
     
     # Read raw CPI figures from Qx 19xx onwards
     input_file =  "data/640101.xlsx"
-    CPI_DATA_COLUMNS = ["Date", "Sydney", "Melbourne", "Brisbane", "Perth", "Australia"]
+    CPI_DATA_COLUMNS = ["Date", "Australia"]
     print(f"Reading {input_file}...")
     try:
         cpi_data = pd.read_excel(
@@ -133,7 +140,7 @@ def main() -> None:
             index_col= 0,
             header= None,
             skiprows= 139,  
-            usecols= "A:D, F, J", 
+            usecols= "A, J", 
             names= CPI_DATA_COLUMNS
         )
         cpi_data.index = pd.DatetimeIndex(data=cpi_data.index, freq="QS-DEC")
@@ -142,36 +149,34 @@ def main() -> None:
         exit(1)
     print("Read done, testing raw data for stationarity...")
     
-    # Test all cols for stationarity
-    # test_for_stationarity(cpi_data)
-    # make_autocorrelation_plots(cpi_data, "raw_acf")
+    # Test raw data for stationarity
+    test_for_stationarity(cpi_data)
+    make_autocorrelation_plots(cpi_data, "raw_acf")
 
     # Produce CPI line plot
-    # print("Plotting all CPI line graphs...")
-    # plot_visualisation(
-    #     data = cpi_data, 
-    #     plot_function = sns.lineplot,
-    #     chart_title = "QoQ Australian national and state capital CPIs over time",
-    #     x_label = "Year",
-    #     y_label = "CPI",
-    #     save_fig = True,
-    #     show_fig = False
-    # )
+    print("Plotting all CPI line graphs...")
+    plot_visualisation(
+        data = cpi_data, 
+        plot_function = sns.lineplot,
+        chart_title = "QoQ Australian CPI",
+        x_label = "Year",
+        y_label = "CPI",
+        save_fig = True,
+        show_fig = False
+    )
 
     # Estimate difference order with pmdarima
-    estimated_orders = []
+    order: int
     for col in CPI_DATA_COLUMNS[1:]:
         kpss_order = ndiffs(cpi_data[col], test = "kpss", max_d = 4)
         adf_order = ndiffs(cpi_data[col], test = "adf", max_d = 4)
         order =  adf_order if adf_order <= kpss_order else kpss_order
-        estimated_orders.append(order) 
-    differenced_df = difference_data(cpi_data, estimated_orders)
-    print(f"Estimated difference orders: {estimated_orders}")
-    # test_for_stationarity(differenced_df) 
-    # make_autocorrelation_plots(differenced_df, "1st_diff_acf")
-    model = ARIMA(endog = cpi_data['Australia'], order=(2,1,1))
-    res: ARIMAResults
-    res = model.fit()
-    print(res.specification)
-    print(res.summary())
+    print(f"Estimated difference order: {order}")
+
+    # test 1st difference for stationarity
+    differenced_df = difference_data(cpi_data, order)
+    test_for_stationarity(differenced_df) 
+    make_autocorrelation_plots(differenced_df, "1st_diff_acf")
+
+    estimate_best_model(cpi_data, order)
 main()
