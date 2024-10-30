@@ -100,23 +100,35 @@ def test_for_stationarity(data: pd.DataFrame) -> None:
     print(f"ADF Testing\n{adf}\n")
     print(f"KPSS Testing\n{kpss}\n")
 
-def difference_data(data: pd.DataFrame | pd.Series, order: list[int]) -> pd.DataFrame | pd.Series:
-    i = 0
+def difference_data(data: pd.DataFrame | pd.Series, order: int) -> pd.DataFrame | pd.Series:
     differenced = data.copy(deep=True)
     for col in data.columns:
         differenced[col] = np.append(
-            [np.nan] * order[i], 
-            np.diff(data[col], n = order[i])
+            [np.nan] * order, 
+            np.diff(data[col], n = order)
         )
-        i += 1
     return differenced.dropna(axis=0)
 
-def estimate_best_model(data: pd.DataFrame, max_p: list[int], max_q: list[int], d_list: list[int]):
+def corrected_aic(aic : float, param_count: int, num_observations : int):
+    correction_term = float(2 * (param_count + 1) * (param_count + 2)) / float(num_observations - 2)
+    return aic + correction_term
+
+def estimate_best_model(data: pd.DataFrame, max_p: int, max_q: int, d: int) -> ARIMAResults:
     # Brute force search from 0 -> max val for each p and q
     # Minimum AIC criterion decided as best or min MLE/LSE
     # Maybe do model eval here so models can be judged based on that 
     # Return dict with a model for each column
-    pass
+    model: ARIMA
+    result: ARIMAResults
+    best_result: ARIMAResults = None
+    for p in range (0, max_p + 1):
+        for q in range (0, max_q + 1):
+            model = ARIMA(endog = data, exog = None, order = (p, d, q))
+            result = model.fit()
+            model_order = result.specification['order']
+
+            
+    return best_result
 
 def main() -> None:
     sns.set_theme(style ="whitegrid")
@@ -166,17 +178,22 @@ def main() -> None:
     )
 
     # Estimate difference order with pmdarima
-    order: int
+    d: int
     for col in CPI_DATA_COLUMNS[1:]:
         kpss_order = ndiffs(cpi_data[col], test = "kpss", max_d = 4)
         adf_order = ndiffs(cpi_data[col], test = "adf", max_d = 4)
-        order =  adf_order if adf_order <= kpss_order else kpss_order
-    print(f"Estimated difference order: {order}")
+        d =  adf_order if adf_order <= kpss_order else kpss_order
+    print(f"Estimated difference order: {d}")
 
     # test 1st difference for stationarity
-    differenced_df = difference_data(cpi_data, order)
+    differenced_df = difference_data(cpi_data, d)
     test_for_stationarity(differenced_df) 
     make_autocorrelation_plots(differenced_df, "1st_diff_acf")
-
-    estimate_best_model(cpi_data, order)
+    # max values obtained by examining autocorrelation plots
+    p = 2
+    q = 5
+    # estimate_best_model(cpi_data, max_p = p, max_q = q, d = diff_order)
+    model = ARIMA(endog = cpi_data, exog = None, order = (2, d, 1))
+    result = model.fit()
+    print(result.specification)
 main()
